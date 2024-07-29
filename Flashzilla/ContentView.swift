@@ -8,14 +8,23 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    @State private var cards = Array<Card>(repeating: .example, count: 10)
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        ZStack {
+            Image(.background)
+                .resizable()
+                .ignoresSafeArea()
+            VStack {
+                ZStack {
+                    ForEach(0..<cards.count, id: \.self) { item in
+                        CardView(card: cards[item])
+                            .stacked(at: item, in: cards.count)
+                    }
+                }
+            }
         }
-        .padding()
     }
 }
 
