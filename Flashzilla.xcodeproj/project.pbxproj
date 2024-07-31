@@ -18,6 +18,7 @@
 		9E7EB63C2C57F82E001D0B2D /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7EB63B2C57F82E001D0B2D /* CardView.swift */; };
 		9E7EB6412C57FD71001D0B2D /* TestGestureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7EB6402C57FD71001D0B2D /* TestGestureView.swift */; };
 		9E7EB6432C57FE11001D0B2D /* Extension-View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E7EB6422C57FE11001D0B2D /* Extension-View.swift */; };
+		9E90EAFB2C5980A600CDE1BF /* EditCards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E90EAFA2C5980A600CDE1BF /* EditCards.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +53,7 @@
 		9E7EB63B2C57F82E001D0B2D /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 		9E7EB6402C57FD71001D0B2D /* TestGestureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestGestureView.swift; sourceTree = "<group>"; };
 		9E7EB6422C57FE11001D0B2D /* Extension-View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension-View.swift"; sourceTree = "<group>"; };
+		9E90EAFA2C5980A600CDE1BF /* EditCards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditCards.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +108,7 @@
 				9E12E7F12C5519A30085CA75 /* ContentView.swift */,
 				9E7EB6392C57F703001D0B2D /* Card.swift */,
 				9E7EB63B2C57F82E001D0B2D /* CardView.swift */,
+				9E90EAFA2C5980A600CDE1BF /* EditCards.swift */,
 				9E7EB6422C57FE11001D0B2D /* Extension-View.swift */,
 				9E7EB63F2C57FD3E001D0B2D /* OptionsTest */,
 				9E12E7F32C5519A40085CA75 /* Assets.xcassets */,
@@ -280,6 +283,7 @@
 				9E7EB6412C57FD71001D0B2D /* TestGestureView.swift in Sources */,
 				9E12E7F22C5519A30085CA75 /* ContentView.swift in Sources */,
 				9E7EB63A2C57F703001D0B2D /* Card.swift in Sources */,
+				9E90EAFB2C5980A600CDE1BF /* EditCards.swift in Sources */,
 				9E7EB63C2C57F82E001D0B2D /* CardView.swift in Sources */,
 				9E7EB6432C57FE11001D0B2D /* Extension-View.swift in Sources */,
 				9E12E7F02C5519A30085CA75 /* FlashzillaApp.swift in Sources */,

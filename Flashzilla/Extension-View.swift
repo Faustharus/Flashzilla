@@ -12,4 +12,7 @@ extension View {
         let offset = Double(total - position)
         return self.offset(y: offset * 10)
     }
+    
+//    RoundedRectangle(cornerRadius: 25)
+//        .fill(offset.width > 0 ? .green : .red)
 }

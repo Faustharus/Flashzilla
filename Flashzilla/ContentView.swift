@@ -10,17 +10,19 @@ import SwiftUI
 struct ContentView: View {
     
     @Environment(\.accessibilityDifferentiateWithoutColor) var accessibilityDifferentiateWithoutColor
+    @Environment(\.accessibilityVoiceOverEnabled) var accessibilityVoiceOverEnabled
     @Environment(\.scenePhase) var scenePhase
     
-    @State private var cards = Array<Card>(repeating: .example, count: 10)
+    @State private var cards = [Card]()
     @State private var isActive: Bool = true
     @State private var timeRemaining: Int = 100
+    @State private var showingEditScreen: Bool = false
     
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
     var body: some View {
         ZStack {
-            Image(.background)
+            Image(decorative: "background")
                 .resizable()
                 .ignoresSafeArea()
             VStack {
@@ -33,33 +35,80 @@ struct ContentView: View {
                     .clipShape(.capsule)
                 
                 ZStack {
-                    ForEach(0..<cards.count, id: \.self) { index in
-                        let _ = print("\(cards.count)")
+                    ForEach(0 ..< cards.count, id: \.self) { index in
                         CardView(card: cards[index]) {
                             removeCard(at: index)
                         }
                         .stacked(at: index, in: cards.count)
                         .allowsHitTesting(index == cards.count - 1)
+                        .accessibilityHidden(index < cards.count - 1)
                     }
+                }
+                .allowsHitTesting(timeRemaining > 0)
+                
+                if cards.isEmpty {
+                    Spacer().frame(height: 10)
+                    
+                    Button("Start Again", action: resetCards)
+                        .padding()
+                        .background(.white)
+                        .foregroundStyle(.black)
+                        .clipShape(.capsule)
                 }
             }
             
-            if accessibilityDifferentiateWithoutColor {
+            VStack {
+                HStack {
+                    Spacer()
+                    
+                    Button {
+                        showingEditScreen = true
+                    } label: {
+                        Image(systemName: "plus.circle")
+                            .padding(5)
+                            .background(.black.opacity(0.7))
+                            .clipShape(.circle)
+                    }
+                }
+                
+                Spacer()
+            }
+            .foregroundStyle(.white)
+            .font(.largeTitle)
+            .padding()
+            
+            if accessibilityDifferentiateWithoutColor || accessibilityVoiceOverEnabled {
                 VStack {
                     Spacer()
                     
                     HStack {
-                        Image(systemName: "xmark.circle")
-                            .padding(5)
-                            .background(.black.opacity(0.7))
-                            .clipShape(.circle)
+                        Button {
+                            withAnimation {
+                                removeCard(at: cards.count - 1)
+                            }
+                        } label: {
+                            Image(systemName: "xmark.circle")
+                                .padding(5)
+                                .background(.black.opacity(0.7))
+                                .clipShape(.circle)
+                        }
+                        .accessibilityLabel("Wrong")
+                        .accessibilityHint("Mark your answer as being incorrect")
                         
                         Spacer()
                         
-                        Image(systemName: "checkmark.circle")
-                            .padding(5)
-                            .background(.black.opacity(0.7))
-                            .clipShape(.circle)
+                        Button {
+                            withAnimation {
+                                removeCard(at: cards.count - 1)
+                            }
+                        } label: {
+                            Image(systemName: "checkmark.circle")
+                                .padding(5)
+                                .background(.black.opacity(0.7))
+                                .clipShape(.circle)
+                        }
+                        .accessibilityLabel("Correct")
+                        .accessibilityHint("Mark your answer as being correct")
                     }
                     .foregroundStyle(.white)
                     .font(.largeTitle)
@@ -67,6 +116,8 @@ struct ContentView: View {
                 }
             }
         }
+        .onAppear(perform: resetCards)
+        .sheet(isPresented: $showingEditScreen, onDismiss: resetCards, content: EditCards.init)
         .onReceive(timer) { time in
             guard isActive else { return }
             
@@ -76,7 +127,9 @@ struct ContentView: View {
         }
         .onChange(of: scenePhase) {
             if scenePhase == .active {
-                isActive = true
+                if cards.isEmpty == false {
+                    isActive = true
+                }
             } else {
                 isActive = false
             }
@@ -92,7 +145,26 @@ struct ContentView: View {
 extension ContentView {
     
     func removeCard(at position: Int) {
+        guard position >= 0 else { return }
+        
         cards.remove(at: position)
+        if cards.isEmpty {
+            isActive = false
+        }
+    }
+    
+    func resetCards() {
+        timeRemaining = 100
+        isActive = true
+        loadData()
+    }
+    
+    func loadData() {
+        if let data = UserDefaults.standard.data(forKey: "Cards") {
+            if let decoded = try? JSONDecoder().decode([Card].self, from: data) {
+                cards = decoded
+            }
+        }
     }
     
 }
