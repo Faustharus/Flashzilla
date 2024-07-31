@@ -13,7 +13,7 @@ struct CardView: View {
     @Environment(\.accessibilityVoiceOverEnabled) var accessibilityVoiceOverEnabled
     
     let card: Card
-    var removal: (() -> Void)? = nil
+    var removal: ((Bool) -> Void)? = nil
     
     @State private var isAnswerVisible: Bool = false
     @State private var offset: CGSize = .zero
@@ -31,7 +31,7 @@ struct CardView: View {
                     accessibilityDifferentiateWithoutColor
                     ? nil
                     : RoundedRectangle(cornerRadius: 25)
-                        .fill(offset.width > 0 ? .green : offset.width < 0 ? .red : .white)
+                        .dragFill(using: offset)
                 )
                 .shadow(radius: 10)
             
@@ -67,7 +67,12 @@ struct CardView: View {
                 }
                 .onEnded { _ in
                     if abs(offset.width) > 100 {
-                        removal?()
+                        if offset.width > 0 {
+                            removal?(false)
+                        } else {
+                            removal?(true)
+                            offset = .zero
+                        }
                     } else {
                         offset = .zero
                     }

@@ -11,7 +11,7 @@ struct EditCards: View {
     
     @Environment(\.dismiss) var dismiss
     
-    @State private var cards = [Card]()
+    @State private var cards = DataManager.loadData()
     @State private var newPrompt: String = ""
     @State private var newAnswer: String = ""
     
@@ -58,9 +58,6 @@ struct EditCards: View {
             .toolbar {
                 Button("Done", action: done)
             }
-            .onAppear {
-                loadData()
-            }
         }
     }
 }
@@ -79,7 +76,7 @@ extension EditCards {
         
         let card = Card(prompt: trimmedPrompts, answer: trimmedAnswers)
         cards.insert(card, at: 0)
-        saveData()
+        DataManager.saveData(cards)
         resetTexts()
     }
     
@@ -90,25 +87,10 @@ extension EditCards {
     
     func removeCards(at offsets: IndexSet) { 
         cards.remove(atOffsets: offsets)
-        saveData()
+        DataManager.saveData(cards)
     }
     
     func done() { 
         dismiss()
     }
-    
-    func loadData() { 
-        if let data = UserDefaults.standard.data(forKey: "Cards") {
-            if let decoded = try?  JSONDecoder().decode([Card].self, from: data) {
-                cards = decoded
-            }
-        }
-    }
-    
-    func saveData() {
-        if let data = try? JSONEncoder().encode(cards) {
-            UserDefaults.standard.setValue(data, forKey: "Cards")
-        }
-    }
-    
 }
