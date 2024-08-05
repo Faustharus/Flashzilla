@@ -14,9 +14,6 @@ struct DataManager {
         if let data = try? JSONEncoder().encode(cards) {
             try? data.write(to: savePath, options: [.atomic, .completeFileProtection])
         }
-//        if let data = try? JSONEncoder().encode(cards) {
-//            UserDefaults.standard.setValue(data, forKey: "Cards")
-//        }
     }
     
     static func loadData() -> [Card] {

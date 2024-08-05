@@ -68,9 +68,11 @@ struct CardView: View {
                 .onEnded { _ in
                     if abs(offset.width) > 100 {
                         if offset.width > 0 {
-                            removal?(false)
+                            removal?(!card.isAnswerTrue)
+//                            removal?(false)
                         } else {
-                            removal?(true)
+                            removal?(card.isAnswerTrue)
+//                            removal?(true)
                             offset = .zero
                         }
                     } else {

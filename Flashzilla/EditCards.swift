@@ -14,6 +14,7 @@ struct EditCards: View {
     @State private var cards = DataManager.loadData()
     @State private var newPrompt: String = ""
     @State private var newAnswer: String = ""
+    @State private var isTrueOrNot: Bool = false
     
     var body: some View {
         NavigationStack {
@@ -23,6 +24,9 @@ struct EditCards: View {
                         .keyboardType(.default)
                     TextField("Answer", text: $newAnswer)
                         .keyboardType(.default)
+                    Toggle(isOn: $isTrueOrNot) {
+                        Text("The Answer is: \(isTrueOrNot.description.capitalized)")
+                    }
                     HStack {
                         Button {
                             addCard()
@@ -72,9 +76,10 @@ extension EditCards {
     func addCard() { 
         let trimmedPrompts = newPrompt.trimmingCharacters(in: .whitespacesAndNewlines)
         let trimmedAnswers = newAnswer.trimmingCharacters(in: .whitespacesAndNewlines)
+        let trimmedTruth = isTrueOrNot
         guard trimmedPrompts.isEmpty == false && trimmedAnswers.isEmpty == false else { return }
         
-        let card = Card(prompt: trimmedPrompts, answer: trimmedAnswers)
+        let card = Card(prompt: trimmedPrompts, answer: trimmedAnswers, isAnswerTrue: trimmedTruth)
         cards.insert(card, at: 0)
         DataManager.saveData(cards)
         resetTexts()
@@ -83,6 +88,7 @@ extension EditCards {
     func resetTexts() { 
         self.newPrompt = ""
         self.newAnswer = ""
+        self.isTrueOrNot = false
     }
     
     func removeCards(at offsets: IndexSet) { 
